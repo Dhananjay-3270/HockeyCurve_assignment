@@ -1,11 +1,12 @@
 import { useState } from "react";
-
+import Tasklist from "./Tasklist";
 import "./App.css";
 
 function App() {
   return (
     <>
-      <div className="task-list-view">
+    
+      {/* <div className="task-list-view">
         <header>
           <div className="task-list-header">
             <svg
@@ -35,7 +36,8 @@ function App() {
               <button className="filter">Done</button>
             </div>
         </div>
-      </div>
+      </div> */}
+      <Tasklist/>
     </>
   );
 }
