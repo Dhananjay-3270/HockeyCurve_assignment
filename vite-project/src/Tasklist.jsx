@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import "./Tasklist.css";
 
 function Tasklist() {
@@ -8,7 +9,8 @@ function Tasklist() {
       dueDate: "30 July 2024",
       priority: "High",
       color: "#8B0000",
-      details: "Details about Task 1",
+      details:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed malesuada eros, id aliquam magna. Mauris massa mi, pharetra non diam eu, aliquet dictum diam.",
       isExpanded: false,
     },
     {
@@ -17,7 +19,8 @@ function Tasklist() {
       dueDate: "25 July 2024",
       priority: "High",
       color: "#8B0000",
-      details: "Details about Task 2",
+      details:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed malesuada eros, id aliquam magna. Mauris massa mi, pharetra non diam eu, aliquet dictum diam.",
       isExpanded: false,
     },
     {
@@ -26,7 +29,8 @@ function Tasklist() {
       dueDate: "01 Aug 2024",
       priority: "Medium",
       color: "#FFA500",
-      details: "Details about Task 3",
+      details:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed malesuada eros, id aliquam magna. Mauris massa mi, pharetra non diam eu, aliquet dictum diam.",
       isExpanded: false,
     },
     {
@@ -35,10 +39,45 @@ function Tasklist() {
       dueDate: "12 Aug 2024",
       priority: "Medium",
       color: "#FFA500",
-      details: "Details about Task 4",
+      details:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed malesuada eros, id aliquam magna. Mauris massa mi, pharetra non diam eu, aliquet dictum diam.",
       isExpanded: false,
     },
   ];
+  const [task, setTask] = useState(initialTasks);
+  const [filter, Setfilter] = useState("All");
+  const [edit, setEdit] = useState(null);
+  const Edit = () => {
+    return (
+      <>
+        <div>Do you want to edit your task</div>
+      </>
+    );
+  };
+
+  const handleFilterChange = (newFilter) => {
+    Setfilter(newFilter);
+  };
+  const handledelete = (id) => {
+    const t = task.filter((tsk) => tsk.id != id);
+    console.log(t);
+    setTask(t);
+  };
+  const filteredtask =
+    filter === "All" ? task : task.filter((t) => t.priority === filter);
+  console.log(filteredtask);
+
+  const handleshowdetail = (id) => {
+    const demotask = [...task];
+    const d = demotask.map((t) => {
+      if (t.id == id) {
+        t.isExpanded = !t.isExpanded;
+      }
+      return t;
+    });
+    setTask(d);
+  };
+
   return (
     <>
       <div className="task-list-view">
@@ -62,34 +101,116 @@ function Tasklist() {
             <button className="addtask-btn"> + Add new task</button>
           </div>
           <div className="task-list-filters">
-            <button className="filter-active">All</button>
-            <button className="filter">High</button>
-            <button className="filter">Medium</button>
-            <button className="filter">Low</button>
-            <button className="filter">Done</button>
+            <button
+              className={filter === "All" ? "filter-active" : "filter"}
+              onClick={() => handleFilterChange("All")}
+            >
+              All
+            </button>
+            <button
+              className={filter === "High" ? "filter-active" : "filter"}
+              onClick={() => handleFilterChange("High")}
+            >
+              High
+            </button>
+            <button
+              className={filter === "Medium" ? "filter-active" : "filter"}
+              onClick={() => handleFilterChange("Medium")}
+            >
+              Medium
+            </button>
+            <button
+              className={filter === "Low" ? "filter-active" : "filter"}
+              onClick={() => handleFilterChange("Low")}
+            >
+              Low
+            </button>
+            <button
+              className={filter === "Done" ? "filter-active" : "filter"}
+              onClick={() => handleFilterChange("Done")}
+            >
+              Done
+            </button>
           </div>
         </div>
         <div className="task-container">
           <ul className="task-list">
-            {initialTasks.map((task) => (
-              <li key={task.id} className="task-list-item">
-                {" "}
-                <div className="task-list-item-info">
-                  <button className="task-expand-button">
-                    {task.isExpanded ? "▼" : "▶"}
-                  </button>
-                  <div>
-                    <div className="task-name">{task.name}</div>
-                    <div className="task-date">Due date:{task.dueDate}</div>
+            {filteredtask.map((t) => (
+              <li key={t.id}>
+                {edit === t.id ? (
+                  <>
+                    <div className="editbox">
+                      <div className="edit-heading">
+                        <div className="edit-heading-text">Edit task</div>
+                        <button>Delete</button>
+                      </div>
+                      <div className="edit-form">
+                        <form className="form"> 
+                          <input
+                            type="text"
+                            name="name"
+                            placeholder="Task name"
+                          />
+                          <input
+                            type="text"
+                            name="details"
+                            placeholder="Edit details"
+                          />
+                          <input type="date" name="dueDate" />
+                          <select name="priority">
+                            <option value="High">High</option>
+                            <option value="High">Medium</option>
+                            <option value="High">Low</option>
+                          </select>
+                        </form>
+                      </div>
+                      <div className="edit-form-btn">
+                        <button>Save Changes</button>
+                        <button>Mark as Done</button>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="task-list-item">
+                    <div className="task-list-item-info">
+                      <div>
+                        <button
+                          onClick={() => handleshowdetail(t.id)}
+                          className="task-expand-button"
+                        >
+                          {t.isExpanded ? "▼" : "▶"}
+                        </button>
+                        <div>
+                          <div className="task-name">{t.name}</div>
+                          <div className="task-date">Due date:{t.dueDate}</div>
+                        </div>
+                      </div>
+                      <div className="task-priority">
+                        {t.priority}
+                        <span
+                          className="priority-indicator"
+                          style={{ backgroundColor: t.color }}
+                        ></span>
+                      </div>
+                    </div>
+
+                    <div>
+                      {t.isExpanded && (
+                        <div className="task-details">
+                          <div>Description:{t.details}</div>
+                          <div>Due date:{t.dueDate}</div>
+                          <div className="task-edit-button">
+                            <button onClick={() => setEdit(t.id)}>Edit</button>
+
+                            <button onClick={() => handledelete(t.id)}>
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-                <div className="task-priority">
-                  {task.priority}
-                  <span
-                    className="priority-indicator"
-                    style={{ backgroundColor: task.color }}
-                  ></span>
-                </div>
+                )}
               </li>
             ))}
           </ul>

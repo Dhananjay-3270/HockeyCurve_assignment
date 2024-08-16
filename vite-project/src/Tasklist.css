@@ -1,109 +1,163 @@
-
-.task-list-header{
-    font-size: 18px;
-    font-weight: bold;
-    background-color: #0b8c8c;
+.task-list-header {
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #0b8c8c;
   width: 200px;
   color: white;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   display: flex;
   justify-content: space-around;
-  }
-  .task-list-actions{
+}
+.task-list-actions {
   height: 110px;
-  background-color:   rgb(200, 199, 196);
+  background-color: rgb(200, 199, 196);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  
-  }
-  .addtask-btn-div{
-    font-size: 18px;
-    font-weight: bold;
-  
-    width: 150px;
-    position: relative;
-    top: 10px;
-    left: 5px;
-    border-radius: 10px;
-  }
-  
-  
-  .addtask-btn-div button {
-    font-size: 15px;
-    font-weight: bold;
-    width: 100%;
-    height: 100%;
-   margin-bottom: 2px;
-   margin-left: 5px;
-   margin-right: 2px;
-   background-color: #0b8c8c;
-   border-radius: 10px;
-   color: white;
-   cursor: pointer;
-  }
-  .task-list-filters{
-    display: flex;
-    flex-direction: row;
-    height: 30px;
-    justify-content: space-around;
-  
-  }
-  .filter {
-    background-color: #035c5c;
-    border-radius: 10px;
-    color: white;
-    width: 200px;
-    cursor: pointer;
-  }
-  .filter-active {
-    border-radius: 10px;
-    color: white;
-    width: 200px;
-    background-color: #11e7e7;
-    cursor: pointer;
-  }
+}
+.addtask-btn-div {
+  font-size: 18px;
+  font-weight: bold;
 
+  width: 150px;
+  position: relative;
+  top: 10px;
+  left: 5px;
+  border-radius: 10px;
+}
 
-  .task-container
-  {
-background-color:   rgb(200, 199, 196);
+.addtask-btn-div button {
+  font-size: 15px;
+  font-weight: bold;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 2px;
+  margin-left: 5px;
+  margin-right: 2px;
+  background-color: #0b8c8c;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+.task-list-filters {
+  display: flex;
+  flex-direction: row;
+  height: 30px;
+  justify-content: space-around;
+}
+.filter {
+  background-color: #035c5c;
+  border-radius: 10px;
+  color: white;
+  width: 200px;
+  cursor: pointer;
+}
+.filter-active {
+  border-radius: 10px;
+  background-color: white;
+  width: 200px;
+  color: #0b8c8c;
+  cursor: pointer;
+}
 
-  }
+.task-container {
+  background-color: rgb(200, 199, 196);
+}
 
-  .task-list{
-    list-style: none;
- 
-  }
-  .task-list-item{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #fff;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
+.task-list {
+  list-style: none;
+}
+.task-list-item {
+  display: flex;
+  flex-direction: column;
+
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
 .task-expand-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin-right: 10px;
+}
 
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-    margin-right: 10px;
- }
+.priority-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+.task-priority {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: #333;
+}
 
+.task-details {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+.task-list-item-info {
+  display: flex;
+  justify-content: space-between;
+}
+.task-edit-button {
+  display: flex;
+  justify-content: space-around;
+}
+.task-edit-button button {
+  background-color: #0b8c8c;
+  color: white;
+  border-radius: 2px;
+  height: 35px;
+  width: 60px;
+  border-radius: 10px;
+  border: solid white;
+  cursor: pointer;
+}
+.editbox {
+  height: 200px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.edit-heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.edit-heading button {
+  background-color: red;
+  color: white;
+  border: solid red;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.edit-form-btn{
+  display: flex;
+  justify-content: space-around;
+  padding-top: 10px;
+}
+.edit-form-btn button{
+background-color: #035c5c;
+color: white;
+border:solid #035c5c ;
+border-radius: 5px;
+cursor: pointer;
+}
 
- .priority-indicator {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-left: 5px;
-  }
-  .task-priority{
-    display: flex;
-    align-items: center;
-    font-weight: bold;
-    color: #333;
-  }
+.edit-heading-text {
+  font-size: medium;
+  font-weight: bolder;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
