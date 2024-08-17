@@ -136,16 +136,22 @@ height: 30px;
   flex-direction: row;
   justify-content: space-around;
 }
-.edit-heading button {
+.edit-heading-done-delete {
   background-color: red;
   color: white;
   border: solid red;
   border-radius: 5px;
   cursor: pointer;
 }
+.edit-heading-done-btn{
+  background-color: #0b8c8c;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+}
 .edit-form-btn{
   display: flex;
-  justify-content: space-around;
+ 
   padding-top: 10px;
 }
 .edit-form-btn button{

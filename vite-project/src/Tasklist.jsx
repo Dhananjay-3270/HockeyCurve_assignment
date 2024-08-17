@@ -77,16 +77,23 @@ function Tasklist() {
     filter === "All" ? task : task.filter((t) => t.priority === filter);
 
   const handleeditsubmit = (event, id) => {
+    const colormap = {
+      High: "#8B0000",
+      Medium: "#FFA500",
+      Low: "#4B0082",
+    };
     event.preventDefault();
     const t = [...task];
-    t.map((tsk) => {
+    const demo = t.map((tsk) => {
       if (tsk.id == id) {
         tsk.name = event.target.name.value;
         tsk.details = event.target.details.value;
         tsk.dueDate = event.target.dueDate.value;
+        tsk.priority = event.target.priority.value;
+        tsk.color = colormap[event.target.priority.value];
       }
     });
-    setTask(t);
+    setTask(demo);
     setEdit(null);
   };
   const handleshowdetail = (id) => {
@@ -103,25 +110,53 @@ function Tasklist() {
     const { name, value } = event.target;
     setNewtask({ ...newtask, [name]: value });
   };
+
   const addtask = (event) => {
-event.preventDefault()
-    const id = task.length + 1;
-    const colormap = {
-      High: "#8B0000",
-      Medium: "#FFA500",
-      Low: "#90EE90",
-    };
-    const newtaskobj = {
-      ...newtask,
-      id,
-      color: colormap[newtask.priority],
-      isExpanded: false,
-    };
+    let taskname = newtask.name;
+    const today = new Date();
+    let c1 = today.getTime();
+    let c2 = new Date(newtask.dueDate).getTime();
+    let flag = task.some((t)=>t.name==taskname)
+    if(!flag){
+      if (c2 - c1 >= 0) {
+        event.preventDefault();
+        const id = task.length + 1;
+        const colormap = {
+          High: "#8B0000",
+          Medium: "#FFA500",
+          Low: "#4B0082",
+        };
+        const newtaskobj = {
+          ...newtask,
+          id,
+          color: colormap[newtask.priority],
+          isExpanded: false,
+        };
+  
+        setTask([...task, newtaskobj]);
+        setShowAddTaskForm(false);
+        setNewtask({ name: "", dueDate: "", priority: "Medium", details: "" });
+      } else {
+        alert("Please Enter valid due date ");
+      }
+    }
+    else{
+      alert("Please Enter new taskname")
+    }
    
-    setTask([...task, newtaskobj]);
-    setShowAddTaskForm(false);
-    setNewtask({ name: "", dueDate: "", priority: "Medium", details: "" });
-console.log(task)
+  };
+  const handledone = (id) => {
+    const demo = [...task];
+    const t = demo.map((tsk) => {
+      if (tsk.id == id) {
+        tsk.priority = "Done";
+        tsk.color = "#00563B";
+      }
+      return tsk;
+    });
+
+    setTask(t);
+    setEdit(null);
   };
   return (
     <>
@@ -150,41 +185,41 @@ console.log(task)
               {showAddTaskForm ? "Cancel" : "+ Add New Task"}
             </button>
           </div>
-          <>          {showAddTaskForm && (
-            <div className="add-task-form">
-              <input
-                type="text"
-                name="name"
-                placeholder="Task Name"
-                value={newtask.name}
-                onChange={handleInputChange}
-              />
-              <input
-                type="date"
-                name="dueDate"
-                value={newtask.dueDate}
-                onChange={handleInputChange}
-              />
-              <select
-                name="priority"
-                value={newtask.priority}
-                onChange={handleInputChange}
-              >
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
-              <textarea
-                name="details"
-                placeholder="Task Details"
-                value={newtask.details}
-                onChange={handleInputChange}
-              ></textarea>
-              <button onClick={addtask}>Add Task</button>
-            </div>
-          )}
+          <>
+            {showAddTaskForm && (
+              <div className="add-task-form">
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Task Name"
+                  value={newtask.name}
+                  onChange={handleInputChange}
+                />
+                <input
+                  type="date"
+                  name="dueDate"
+                  value={newtask.dueDate}
+                  onChange={handleInputChange}
+                />
+                <select
+                  name="priority"
+                  value={newtask.priority}
+                  onChange={handleInputChange}
+                >
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+                <textarea
+                  name="details"
+                  placeholder="Task Details"
+                  value={newtask.details}
+                  onChange={handleInputChange}
+                ></textarea>
+                <button onClick={addtask}>Add Task</button>
+              </div>
+            )}
           </>
-
 
           <div className="task-list-filters">
             <button
@@ -219,108 +254,111 @@ console.log(task)
             </button>
           </div>
           <div className="task-container">
-          <ul className="task-list">
-            {filteredtask.map((t) => (
-              <li key={t.id}>
-                {edit === t.id ? (
-                  <>
-                    <div className="editbox">
-                      <div className="edit-heading">
-                        <div className="edit-heading-text">Edit task</div>
-                        <button onClick={() => handledelete(t.id)}>
-                          Delete
-                        </button>
-                      </div>
-                      <div className="edit-form">
-                        <form
-                          className="form"
-                          onSubmit={() => handleeditsubmit(event, t.id)}
-                        >
-                          <input
-                            type="text"
-                            name="name"
-                            placeholder="Task name"
-                          />
-                          <input
-                            type="text"
-                            name="details"
-                            placeholder="Edit details"
-                          />
-                          <input type="date" name="dueDate" />
-                          <select name="priority">
-                            <option value=""> Select Priority</option>
+            <ul className="task-list">
+              {filteredtask.map((t) => (
+                <li key={t.id}>
+                  {edit === t.id ? (
+                    <>
+                      <div className="editbox">
+                        <div className="edit-heading">
+                          <div className="edit-heading-text">Edit task</div>
+                          <button
+                            className="edit-heading-done-delete"
+                            onClick={() => handledelete(t.id)}
+                          >
+                            Delete
+                          </button>
+                          <button
+                            className="edit-heading-done-btn"
+                            onClick={() => handledone(t.id)}
+                          >
+                            Mark as Done
+                          </button>
+                        </div>
+                        <div className="edit-form">
+                          <form
+                            className="form"
+                            onSubmit={() => handleeditsubmit(event, t.id)}
+                          >
+                            <input
+                              type="text"
+                              name="name"
+                              placeholder="Task name"
+                            />
+                            <input
+                              type="text"
+                              name="details"
+                              placeholder="Edit details"
+                            />
+                            <input type="date" name="dueDate" />
+                            <select name="priority">
+                              <option value=""> Select Priority</option>
 
-                            <option value="High">
-                              <div className="option">
-                                <h4>High</h4>
-                                <span
-                                  className="priority-indicator-small"
-                                  style={{ backgroundColor: "#8B0000" }}
-                                ></span>
-                              </div>
-                            </option>
-                            <option value="High">Medium</option>
-                            <option value="High">Low</option>
-                          </select>
-                          <div className="edit-form-btn">
-                            <button type="submit">Save Changes</button>
-                            <button disabled> Mark as Done</button>
-                          </div>
-                        </form>
-                      </div>
+                              <option value="High">High</option>
+                              <option value="Medium">Medium</option>
+                              <option value="Low">Low</option>
+                            </select>
+                            <div className="edit-form-btn">
+                              <button type="submit">Save Changes</button>
+                            </div>
+                          </form>
+                        </div>
 
-                      <div className="edit-form-cancel-btn">
-                        <button onClick={() => setEdit(null)}>Cancel</button>
+                        <div className="edit-form-cancel-btn">
+                          <button onClick={() => setEdit(null)}>Cancel</button>
+                        </div>
                       </div>
-                    </div>
-                  </>
-                ) : (
-                  <div className="task-list-item">
-                    <div className="task-list-item-info">
-                      <div>
-                        <button
-                          onClick={() => handleshowdetail(t.id)}
-                          className="task-expand-button"
-                        >
-                          {t.isExpanded ? "▼" : "▶"}
-                        </button>
+                    </>
+                  ) : (
+                    <div className="task-list-item">
+                      <div className="task-list-item-info">
                         <div>
-                          <div className="task-name">{t.name}</div>
-                          <div className="task-date">Due date:{t.dueDate}</div>
-                        </div>
-                      </div>
-                      <div className="task-priority">
-                        {t.priority}
-                        <span
-                          className="priority-indicator"
-                          style={{ backgroundColor: t.color }}
-                        ></span>
-                      </div>
-                    </div>
-
-                    <div>
-                      {t.isExpanded && (
-                        <div className="task-details">
-                          <div>Description:{t.details}</div>
-                          <div>Due date:{t.dueDate}</div>
-                          <div className="task-edit-button">
-                            <button onClick={() => setEdit(t.id)}>Edit</button>
-
-                            <button onClick={() => handledelete(t.id)}>
-                              Delete
-                            </button>
+                          <button
+                            onClick={() => handleshowdetail(t.id)}
+                            className="task-expand-button"
+                          >
+                            {t.isExpanded ? "▼" : "▶"}
+                          </button>
+                          <div>
+                            <div className="task-name">{t.name}</div>
+                            <div className="task-date">
+                              Due date:{t.dueDate}
+                            </div>
                           </div>
                         </div>
-                      )}
+                        <div className="task-priority">
+                          {t.priority}
+                          <span
+                            className="priority-indicator"
+                            style={{ backgroundColor: t.color }}
+                          ></span>
+                        </div>
+                      </div>
+
+                      <div>
+                        {t.isExpanded && (
+                          <div className="task-details">
+                            <div>Description:{t.details}</div>
+                            <div>Due date:{t.dueDate}</div>
+                            <div className="task-edit-button">
+                              <button onClick={() => setEdit(t.id)}>
+                                Edit
+                              </button>
+
+                              <button onClick={() => handledelete(t.id)}>
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        </div>
-      
       </div>
     </>
   );
