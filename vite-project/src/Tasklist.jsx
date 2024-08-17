@@ -77,12 +77,13 @@ function Tasklist() {
     filter === "All" ? task : task.filter((t) => t.priority === filter);
 
   const handleeditsubmit = (event, id) => {
+    event.preventDefault();
     const colormap = {
       High: "#8B0000",
       Medium: "#FFA500",
       Low: "#4B0082",
     };
-    event.preventDefault();
+
     const t = [...task];
     const demo = t.map((tsk) => {
       if (tsk.id == id) {
@@ -92,6 +93,7 @@ function Tasklist() {
         tsk.priority = event.target.priority.value;
         tsk.color = colormap[event.target.priority.value];
       }
+      return tsk;
     });
     setTask(demo);
     setEdit(null);
@@ -116,8 +118,8 @@ function Tasklist() {
     const today = new Date();
     let c1 = today.getTime();
     let c2 = new Date(newtask.dueDate).getTime();
-    let flag = task.some((t)=>t.name==taskname)
-    if(!flag){
+    let flag = task.some((t) => t.name == taskname);
+    if (!flag) {
       if (c2 - c1 >= 0) {
         event.preventDefault();
         const id = task.length + 1;
@@ -132,18 +134,16 @@ function Tasklist() {
           color: colormap[newtask.priority],
           isExpanded: false,
         };
-  
+
         setTask([...task, newtaskobj]);
         setShowAddTaskForm(false);
         setNewtask({ name: "", dueDate: "", priority: "Medium", details: "" });
       } else {
         alert("Please Enter valid due date ");
       }
+    } else {
+      alert("Please Enter new taskname");
     }
-    else{
-      alert("Please Enter new taskname")
-    }
-   
   };
   const handledone = (id) => {
     const demo = [...task];
