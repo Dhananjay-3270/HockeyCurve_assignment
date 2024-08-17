@@ -19,7 +19,7 @@
 .addtask-btn-div {
   font-size: 18px;
   font-weight: bold;
-
+height: 30px;
   width: 150px;
   position: relative;
   top: 10px;
@@ -45,6 +45,7 @@
   flex-direction: row;
   height: 30px;
   justify-content: space-around;
+  padding-top: 15px;
 }
 .filter {
   background-color: #035c5c;
@@ -62,17 +63,20 @@
 }
 
 .task-container {
-  background-color: rgb(200, 199, 196);
+  background-color: white;
 }
 
 .task-list {
   list-style: none;
+  padding-top: 10px;
+  padding-right: 10px;
+  background-color: white;
 }
 .task-list-item {
   display: flex;
   flex-direction: column;
 
-  background-color: #fff;
+  background-color: rgb(200, 199, 196);
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
@@ -160,4 +164,50 @@ cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+.edit-form-cancel-btn {
+  display: flex;
+ justify-content: center;
+  align-items: center;
+}
+.edit-form-cancel-btn button{
+  background-color: #035c5c;
+  color: white;
+  border:solid #035c5c ;
+  border-radius: 5px;
+  cursor: pointer;
+
+}
+
+.option{
+  display: flex;
+
+}
+.priority-indicator-small{
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-left: 5px;
+  
+}
+
+.add-task-form{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+
+padding-top: 10px;
+}
+.add-task-form input,
+.add-task-form select,
+.add-task-form textarea {
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+.add-task-form textarea {
+  resize: none;
+  height: 60px;
 }

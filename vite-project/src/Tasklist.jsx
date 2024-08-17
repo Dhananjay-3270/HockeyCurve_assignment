@@ -43,17 +43,27 @@ function Tasklist() {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed malesuada eros, id aliquam magna. Mauris massa mi, pharetra non diam eu, aliquet dictum diam.",
       isExpanded: false,
     },
+    {
+      id: 5,
+      name: "Task 5",
+      dueDate: "12 Aug 2024",
+      priority: "Low",
+      color: "#4B0082",
+      details:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed malesuada eros, id aliquam magna. Mauris massa mi, pharetra non diam eu, aliquet dictum diam.",
+      isExpanded: false,
+    },
   ];
   const [task, setTask] = useState(initialTasks);
   const [filter, Setfilter] = useState("All");
   const [edit, setEdit] = useState(null);
-  const Edit = () => {
-    return (
-      <>
-        <div>Do you want to edit your task</div>
-      </>
-    );
-  };
+  const [newtask, setNewtask] = useState({
+    name: "",
+    dueDate: "",
+    priority: "Medium",
+    details: "",
+  });
+  const [showAddTaskForm, setShowAddTaskForm] = useState(false);
 
   const handleFilterChange = (newFilter) => {
     Setfilter(newFilter);
@@ -65,8 +75,20 @@ function Tasklist() {
   };
   const filteredtask =
     filter === "All" ? task : task.filter((t) => t.priority === filter);
-  console.log(filteredtask);
 
+  const handleeditsubmit = (event, id) => {
+    event.preventDefault();
+    const t = [...task];
+    t.map((tsk) => {
+      if (tsk.id == id) {
+        tsk.name = event.target.name.value;
+        tsk.details = event.target.details.value;
+        tsk.dueDate = event.target.dueDate.value;
+      }
+    });
+    setTask(t);
+    setEdit(null);
+  };
   const handleshowdetail = (id) => {
     const demotask = [...task];
     const d = demotask.map((t) => {
@@ -77,7 +99,30 @@ function Tasklist() {
     });
     setTask(d);
   };
-
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setNewtask({ ...newtask, [name]: value });
+  };
+  const addtask = (event) => {
+event.preventDefault()
+    const id = task.length + 1;
+    const colormap = {
+      High: "#8B0000",
+      Medium: "#FFA500",
+      Low: "#90EE90",
+    };
+    const newtaskobj = {
+      ...newtask,
+      id,
+      color: colormap[newtask.priority],
+      isExpanded: false,
+    };
+   
+    setTask([...task, newtaskobj]);
+    setShowAddTaskForm(false);
+    setNewtask({ name: "", dueDate: "", priority: "Medium", details: "" });
+console.log(task)
+  };
   return (
     <>
       <div className="task-list-view">
@@ -98,8 +143,49 @@ function Tasklist() {
 
         <div className="task-list-actions">
           <div className="addtask-btn-div">
-            <button className="addtask-btn"> + Add new task</button>
+            <button
+              className="addtask-btn"
+              onClick={() => setShowAddTaskForm(!showAddTaskForm)}
+            >
+              {showAddTaskForm ? "Cancel" : "+ Add New Task"}
+            </button>
           </div>
+          <>          {showAddTaskForm && (
+            <div className="add-task-form">
+              <input
+                type="text"
+                name="name"
+                placeholder="Task Name"
+                value={newtask.name}
+                onChange={handleInputChange}
+              />
+              <input
+                type="date"
+                name="dueDate"
+                value={newtask.dueDate}
+                onChange={handleInputChange}
+              />
+              <select
+                name="priority"
+                value={newtask.priority}
+                onChange={handleInputChange}
+              >
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+              <textarea
+                name="details"
+                placeholder="Task Details"
+                value={newtask.details}
+                onChange={handleInputChange}
+              ></textarea>
+              <button onClick={addtask}>Add Task</button>
+            </div>
+          )}
+          </>
+
+
           <div className="task-list-filters">
             <button
               className={filter === "All" ? "filter-active" : "filter"}
@@ -132,8 +218,7 @@ function Tasklist() {
               Done
             </button>
           </div>
-        </div>
-        <div className="task-container">
+          <div className="task-container">
           <ul className="task-list">
             {filteredtask.map((t) => (
               <li key={t.id}>
@@ -142,10 +227,15 @@ function Tasklist() {
                     <div className="editbox">
                       <div className="edit-heading">
                         <div className="edit-heading-text">Edit task</div>
-                        <button>Delete</button>
+                        <button onClick={() => handledelete(t.id)}>
+                          Delete
+                        </button>
                       </div>
                       <div className="edit-form">
-                        <form className="form"> 
+                        <form
+                          className="form"
+                          onSubmit={() => handleeditsubmit(event, t.id)}
+                        >
                           <input
                             type="text"
                             name="name"
@@ -158,15 +248,29 @@ function Tasklist() {
                           />
                           <input type="date" name="dueDate" />
                           <select name="priority">
-                            <option value="High">High</option>
+                            <option value=""> Select Priority</option>
+
+                            <option value="High">
+                              <div className="option">
+                                <h4>High</h4>
+                                <span
+                                  className="priority-indicator-small"
+                                  style={{ backgroundColor: "#8B0000" }}
+                                ></span>
+                              </div>
+                            </option>
                             <option value="High">Medium</option>
                             <option value="High">Low</option>
                           </select>
+                          <div className="edit-form-btn">
+                            <button type="submit">Save Changes</button>
+                            <button disabled> Mark as Done</button>
+                          </div>
                         </form>
                       </div>
-                      <div className="edit-form-btn">
-                        <button>Save Changes</button>
-                        <button>Mark as Done</button>
+
+                      <div className="edit-form-cancel-btn">
+                        <button onClick={() => setEdit(null)}>Cancel</button>
                       </div>
                     </div>
                   </>
@@ -215,6 +319,8 @@ function Tasklist() {
             ))}
           </ul>
         </div>
+        </div>
+      
       </div>
     </>
   );
